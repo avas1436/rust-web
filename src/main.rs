@@ -3,11 +3,13 @@ use axum::{
     routing::get,
     Router
 };
+mod middlewares;
 
 #[tokio::main]
 async fn main() {
     // Compose the routes
     let app = Router::new()
+    .layer(middleware::from_fn(middlewares::logger_middleware))
         .route("/", get(|| async { "Hello, World!" }));
 
     // Run the app on localhost only

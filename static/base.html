@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fa">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{% block title %}فروشگاه محصولات{% endblock %}</title>
+        <link rel="stylesheet" href="/static/css/base.css" />
+        <script src="/static/js/base.js" defer></script>
+    </head>
+    <body>
+        <!-- هدر سایت -->
+        <header>
+            <div class="logo">
+                <h1>فروشگاه محصولات من</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">خانه</a></li>
+                    <li><a href="/products">محصولات</a></li>
+                    <li><a href="/cart">سبد خرید</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- بخش اصلی محتوا -->
+        <main>
+            {% block content %}
+            <!-- محتوا هر صفحه اینجا قرار می‌گیرد -->
+            {% endblock %}
+        </main>
+
+        <!-- فوتر سایت -->
+        <footer>
+            <p>تمام حقوق محفوظ است © ۲۰۲۶</p>
+        </footer>
+    </body>
+</html>

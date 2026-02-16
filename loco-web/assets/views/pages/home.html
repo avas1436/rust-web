@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title }}</title>
+
+    <!--
+      نکته آموزشی:
+      برای سادگی، CSS را داخل همین فایل گذاشته‌ایم تا همه‌چیز را یکجا ببینید.
+      در پروژه واقعی بهتر است CSS را به فایل جدا (مثلاً /static/styles.css) منتقل کنید.
+    -->
+    <style>
+      :root {
+        --bg: #f4f7fb;
+        --card: #ffffff;
+        --primary: #2f6fed;
+        --primary-soft: #e8f0ff;
+        --text: #202737;
+        --muted: #5f6b85;
+        --radius: 18px;
+        --shadow: 0 14px 36px rgba(30, 53, 112, 0.12);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: "Vazirmatn", "IRANSans", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top right, #dce8ff 0%, transparent 36%),
+          radial-gradient(circle at bottom left, #ebf8ff 0%, transparent 38%),
+          var(--bg);
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 2rem 1rem;
+      }
+
+      .card {
+        width: min(920px, 100%);
+        background: var(--card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .hero {
+        padding: 2.2rem;
+        background: linear-gradient(140deg, #285fda, #4e87ff);
+        color: #fff;
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 4vw, 2.4rem);
+      }
+
+      .hero p {
+        margin: 0.8rem 0 0;
+        color: #edf3ff;
+      }
+
+      .content {
+        padding: 2rem;
+        line-height: 1.9;
+      }
+
+      .buttons {
+        margin-top: 1.8rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      }
+
+      .btn {
+        border: 0;
+        border-radius: 12px;
+        padding: 0.75rem 1.1rem;
+        cursor: pointer;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: #fff;
+      }
+
+      .btn-secondary {
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      ul {
+        margin: 0.7rem 0 0;
+        padding-right: 1.2rem;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <section class="hero">
+        <h1>{{ title }}</h1>
+        <p>{{ subtitle }}</p>
+      </section>
+
+      <section class="content">
+        <p>
+          این قالب برای شروع یادگیری <strong>Loco</strong> طراحی شده: ساده، راست‌چین و قابل توسعه.
+          در گام بعدی، صفحه ورود را با همین سبک ساخته‌ایم تا تمام APIهای احراز هویت را
+          مستقیم تست کنید.
+        </p>
+
+        <ul>
+          <li>قابل استفاده برای صفحه اصلی، داشبورد ساده یا معرفی پروژه.</li>
+          <li>دارای پالت رنگی ملایم و تایپوگرافی خوانا برای زبان فارسی.</li>
+          <li>ساختار فایل تمیز تا بعداً بتوانید Layout مشترک بسازید.</li>
+        </ul>
+
+        <div class="buttons">
+          <!-- لینک به صفحه‌ای که همه‌ی قابلیت‌های auth را در UI تست می‌کند -->
+          <a class="btn btn-primary" href="/login">رفتن به صفحه ورود و تست احراز هویت</a>
+          <a class="btn btn-secondary" href="/api/_health">بررسی سلامت API</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

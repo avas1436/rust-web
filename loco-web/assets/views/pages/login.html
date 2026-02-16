@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title }}</title>
+    <style>
+      :root {
+        --bg: #f4f7fb;
+        --card: #ffffff;
+        --primary: #2f6fed;
+        --primary-soft: #e8f0ff;
+        --text: #202737;
+        --muted: #5f6b85;
+        --success: #0d8f60;
+        --danger: #cc2d4a;
+        --radius: 16px;
+        --shadow: 0 14px 36px rgba(30, 53, 112, 0.12);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Vazirmatn", "IRANSans", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .page {
+        width: min(1150px, 100%);
+        margin: 0 auto;
+        padding: 2rem 1rem 2.8rem;
+      }
+
+      .hero {
+        background: linear-gradient(140deg, #285fda, #4e87ff);
+        color: #fff;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 1.6rem;
+      }
+      .hero h1 { margin: 0; font-size: 1.65rem; }
+      .hero p { margin: .7rem 0 0; color: #edf3ff; }
+
+      .grid {
+        margin-top: 1.1rem;
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      }
+
+      .panel {
+        background: var(--card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 1rem;
+      }
+
+      .panel h2 { margin: 0 0 .8rem; font-size: 1rem; }
+      label { display: block; margin-bottom: .35rem; color: var(--muted); font-size: .88rem; }
+      input {
+        width: 100%;
+        border: 1px solid #d4ddf1;
+        border-radius: 12px;
+        padding: .6rem .7rem;
+        margin-bottom: .55rem;
+        font-family: inherit;
+      }
+
+      button {
+        width: 100%;
+        border: 0;
+        border-radius: 12px;
+        background: var(--primary);
+        color: #fff;
+        padding: .62rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      button.secondary {
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      .helper {
+        margin-top: .45rem;
+        color: var(--muted);
+        font-size: .8rem;
+        line-height: 1.7;
+      }
+
+      .result {
+        margin-top: 1rem;
+        background: #0f172a;
+        color: #f8fafc;
+        border-radius: 14px;
+        padding: 1rem;
+        font-size: .85rem;
+        min-height: 170px;
+        white-space: pre-wrap;
+        overflow: auto;
+      }
+
+      .status {
+        margin-top: .65rem;
+        font-weight: 700;
+      }
+      .status.ok { color: var(--success); }
+      .status.fail { color: var(--danger); }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: .6rem;
+        align-items: end;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <h1>{{ title }}</h1>
+        <p>
+          این صفحه یک Playground آموزشی است: تمام endpointهای احراز هویت پروژه را
+          بدون نیاز به ابزار خارجی (مثل Postman) همین‌جا تست می‌کنید.
+        </p>
+      </section>
+
+      <!--
+        بخش ورود/ثبت‌نام:
+        - ایمیل و رمز یک‌بار وارد می‌شوند و در چند فرم استفاده می‌شوند.
+        - token دریافتی از login/magic-link در حافظه مرورگر نگه‌داری می‌شود.
+      -->
+      <section class="grid">
+        <article class="panel">
+          <h2>1) ثبت‌نام</h2>
+          <label for="register-name">نام</label>
+          <input id="register-name" placeholder="مثلاً علی رضایی" />
+          <label for="auth-email">ایمیل</label>
+          <input id="auth-email" type="email" placeholder="you@example.com" />
+          <label for="auth-password">رمز عبور</label>
+          <input id="auth-password" type="password" placeholder="حداقل ۸ کاراکتر" />
+          <button data-action="register">ارسال ثبت‌نام</button>
+          <p class="helper">به API: <code>POST /api/auth/register</code></p>
+        </article>
+
+        <article class="panel">
+          <h2>2) ورود با رمز</h2>
+          <button data-action="login">ورود</button>
+          <p class="helper">
+            اگر موفق باشد، <code>token</code> در این صفحه ذخیره می‌شود تا درخواست
+            <code>current</code> را هم تست کنیم.
+          </p>
+        </article>
+
+        <article class="panel">
+          <h2>3) دریافت کاربر فعلی</h2>
+          <button data-action="current">دریافت اطلاعات کاربر فعلی</button>
+          <p class="helper">به API: <code>GET /api/auth/current</code> با هدر Authorization</p>
+        </article>
+
+        <article class="panel">
+          <h2>4) فراموشی رمز</h2>
+          <button data-action="forgot">ارسال ایمیل بازیابی</button>
+          <p class="helper">به API: <code>POST /api/auth/forgot</code></p>
+        </article>
+
+        <article class="panel">
+          <h2>5) تنظیم رمز جدید با token</h2>
+          <label for="reset-token">توکن بازیابی</label>
+          <input id="reset-token" placeholder="توکن ایمیل‌شده" />
+          <label for="new-password">رمز جدید</label>
+          <input id="new-password" type="password" placeholder="رمز جدید" />
+          <button data-action="reset">ثبت رمز جدید</button>
+          <p class="helper">به API: <code>POST /api/auth/reset</code></p>
+        </article>
+
+        <article class="panel">
+          <h2>6) لینک جادویی</h2>
+          <button data-action="magic-request">ارسال لینک جادویی</button>
+          <div class="row">
+            <div>
+              <label for="magic-token">توکن لینک جادویی</label>
+              <input id="magic-token" placeholder="توکن دریافت‌شده از ایمیل" />
+            </div>
+            <button class="secondary" data-action="magic-verify">تایید</button>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h2>7) تایید ایمیل</h2>
+          <label for="verify-token">توکن تایید ایمیل</label>
+          <input id="verify-token" placeholder="توکن ایمیل خوش‌آمد" />
+          <button data-action="verify-email">تایید ایمیل</button>
+          <p class="helper">به API: <code>GET /api/auth/verify/{token}</code></p>
+        </article>
+
+        <article class="panel">
+          <h2>8) ارسال مجدد ایمیل تایید</h2>
+          <button data-action="resend">ارسال مجدد تایید</button>
+          <p class="helper">به API: <code>POST /api/auth/resend-verification-mail</code></p>
+        </article>
+      </section>
+
+      <section class="panel" style="margin-top: 1rem;">
+        <h2>خروجی درخواست‌ها</h2>
+        <div id="status" class="status">هنوز درخواستی ارسال نشده است.</div>
+        <pre id="result" class="result">{ "tip": "یکی از دکمه‌ها را بزنید" }</pre>
+      </section>
+    </main>
+
+    <script>
+      // ----------------------------------------------
+      // اسکریپت آموزشی:
+      // هدف این است که با کمترین پیچیدگی، ارتباط صفحه با APIهای احراز هویت را ببینید.
+      // ----------------------------------------------
+
+      // عنصرهای پرکاربرد را یک‌بار می‌گیریم تا کد خواناتر شود.
+      const el = {
+        email: document.getElementById("auth-email"),
+        password: document.getElementById("auth-password"),
+        name: document.getElementById("register-name"),
+        resetToken: document.getElementById("reset-token"),
+        newPassword: document.getElementById("new-password"),
+        magicToken: document.getElementById("magic-token"),
+        verifyToken: document.getElementById("verify-token"),
+        result: document.getElementById("result"),
+        status: document.getElementById("status"),
+      };
+
+      // توکن JWT را در حافظه tab نگه می‌داریم (برای session فعلی).
+      let jwtToken = sessionStorage.getItem("demo_jwt") || "";
+
+      function setStatus(ok, text) {
+        el.status.className = `status ${ok ? "ok" : "fail"}`;
+        el.status.textContent = text;
+      }
+
+      function showResult(title, payload) {
+        el.result.textContent = `${title}\n\n${JSON.stringify(payload, null, 2)}`;
+      }
+
+      async function apiCall({ method, url, body, withAuth = false }) {
+        const headers = { "Content-Type": "application/json" };
+
+        // در صورت نیاز، JWT را روی هدر Authorization می‌گذاریم.
+        if (withAuth && jwtToken) {
+          headers.Authorization = `Bearer ${jwtToken}`;
+        }
+
+        const response = await fetch(url, {
+          method,
+          headers,
+          body: body ? JSON.stringify(body) : undefined,
+        });
+
+        // بعضی endpointها body خالی یا {} دارند؛ این بخش جلوی خطای parse را می‌گیرد.
+        const text = await response.text();
+        let parsed;
+        try {
+          parsed = text ? JSON.parse(text) : { raw: "(empty)" };
+        } catch {
+          parsed = { raw: text };
+        }
+
+        return {
+          ok: response.ok,
+          status: response.status,
+          data: parsed,
+        };
+      }
+
+      async function handleAction(action) {
+        try {
+          let result;
+
+          switch (action) {
+            case "register":
+              result = await apiCall({
+                method: "POST",
+                url: "/api/auth/register",
+                body: {
+                  name: el.name.value,
+                  email: el.email.value,
+                  password: el.password.value,
+                },
+              });
+              break;
+
+            case "login":
+              result = await apiCall({
+                method: "POST",
+                url: "/api/auth/login",
+                body: { email: el.email.value, password: el.password.value },
+              });
+
+              // اگر ورود موفق بود token را ذخیره می‌کنیم تا برای /current استفاده شود.
+              if (result.ok && result.data && result.data.token) {
+                jwtToken = result.data.token;
+                sessionStorage.setItem("demo_jwt", jwtToken);
+              }
+              break;
+
+            case "current":
+              result = await apiCall({
+                method: "GET",
+                url: "/api/auth/current",
+                withAuth: true,
+              });
+              break;
+
+            case "forgot":
+              result = await apiCall({
+                method: "POST",
+                url: "/api/auth/forgot",
+                body: { email: el.email.value },
+              });
+              break;
+
+            case "reset":
+              result = await apiCall({
+                method: "POST",
+                url: "/api/auth/reset",
+                body: {
+                  token: el.resetToken.value,
+                  password: el.newPassword.value,
+                },
+              });
+              break;
+
+            case "magic-request":
+              result = await apiCall({
+                method: "POST",
+                url: "/api/auth/magic-link",
+                body: { email: el.email.value },
+              });
+              break;
+
+            case "magic-verify":
+              result = await apiCall({
+                method: "GET",
+                url: `/api/auth/magic-link/${el.magicToken.value}`,
+              });
+
+              // اگر verify موفق بود، این endpoint هم token برمی‌گرداند.
+              if (result.ok && result.data && result.data.token) {
+                jwtToken = result.data.token;
+                sessionStorage.setItem("demo_jwt", jwtToken);
+              }
+              break;
+
+            case "verify-email":
+              result = await apiCall({
+                method: "GET",
+                url: `/api/auth/verify/${el.verifyToken.value}`,
+              });
+              break;
+
+            case "resend":
+              result = await apiCall({
+                method: "POST",
+                url: "/api/auth/resend-verification-mail",
+                body: { email: el.email.value },
+              });
+              break;
+
+            default:
+              throw new Error("action ناشناخته است");
+          }
+
+          setStatus(
+            result.ok,
+            `${result.ok ? "موفق" : "ناموفق"} | HTTP ${result.status} | ${action}`,
+          );
+          showResult(`نتیجه: ${action}`, result.data);
+        } catch (error) {
+          setStatus(false, `خطا در ارسال درخواست | ${action}`);
+          showResult("Error", { message: error.message });
+        }
+      }
+
+      // event delegation: همه‌ی دکمه‌ها با data-action را اینجا مدیریت می‌کنیم.
+      document.addEventListener("click", (event) => {
+        const target = event.target.closest("button[data-action]");
+        if (!target) return;
+        handleAction(target.dataset.action);
+      });
+    </script>
+  </body>
+</html>

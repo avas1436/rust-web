@@ -1,12 +1,812 @@
-<html><body>
-  <img src="/static/image.png" width="200"/>
-  <br/>
-  find this tera template at <code>assets/views/home/hello.html</code>: 
-  <br/>
-  <br/>
-  {{ t(key="hello-world", lang="en-US") }}, 
-  <br/>
-  {{ t(key="hello-world", lang="de-DE") }}
-  
-</body></html>
-  
+<!doctype html>
+<html lang="fa" dir="rtl">
+    <head>
+        <meta charset="UTF-8" />
+        <title>دالر تری فارسی | فروشگاه آنلاین</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="فروشگاه آنلاین دالر تری فارسی؛ محصولات متنوع با قیمت‌های اقتصادی."
+        />
+
+        <!-- فونت ساده و سبک (سیستم) برای سبک موندن -->
+        <style>
+            :root {
+                --color-primary: #0f766e;
+                --color-primary-soft: #ccfbf1;
+                --color-bg: #f9fafb;
+                --color-text: #111827;
+                --color-muted: #6b7280;
+                --radius-lg: 12px;
+                --radius-md: 8px;
+                --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.08);
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    sans-serif;
+                background-color: var(--color-bg);
+                color: var(--color-text);
+                line-height: 1.6;
+            }
+
+            a {
+                text-decoration: none;
+                color: inherit;
+            }
+
+            img {
+                max-width: 100%;
+                display: block;
+            }
+
+            /* لایه اصلی */
+            .page {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            header {
+                background: white;
+                box-shadow: 0 1px 0 rgba(15, 23, 42, 0.06);
+                position: sticky;
+                top: 0;
+                z-index: 10;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 1.25rem;
+            }
+
+            .header-inner {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0.75rem 0;
+                gap: 1rem;
+            }
+
+            .brand {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .brand-logo {
+                width: 40px;
+                height: 40px;
+                border-radius: 999px;
+                background: radial-gradient(circle at 30% 30%, #a7f3d0, #0f766e);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: 800;
+                font-size: 1.1rem;
+                box-shadow: 0 8px 18px rgba(15, 118, 110, 0.35);
+            }
+
+            .brand-text-main {
+                font-weight: 700;
+                font-size: 1.1rem;
+            }
+
+            .brand-text-sub {
+                font-size: 0.8rem;
+                color: var(--color-muted);
+            }
+
+            .search-box {
+                flex: 1;
+                max-width: 420px;
+                position: relative;
+            }
+
+            .search-input {
+                width: 100%;
+                padding: 0.55rem 0.75rem;
+                padding-right: 2.3rem;
+                border-radius: 999px;
+                border: 1px solid #e5e7eb;
+                font-size: 0.9rem;
+                background-color: #f9fafb;
+                transition:
+                    border-color 0.15s ease,
+                    box-shadow 0.15s ease,
+                    background-color 0.15s ease;
+            }
+
+            .search-input:focus {
+                outline: none;
+                border-color: var(--color-primary);
+                box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.35);
+                background-color: white;
+            }
+
+            .search-icon {
+                position: absolute;
+                right: 0.75rem;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 0.9rem;
+                color: var(--color-muted);
+            }
+
+            .header-actions {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                font-size: 0.9rem;
+            }
+
+            .header-link {
+                color: var(--color-muted);
+                cursor: pointer;
+                white-space: nowrap;
+            }
+
+            .btn-cart {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                padding: 0.45rem 0.9rem;
+                border-radius: 999px;
+                border: none;
+                background: var(--color-primary);
+                color: white;
+                font-size: 0.85rem;
+                cursor: pointer;
+                box-shadow: 0 8px 18px rgba(15, 118, 110, 0.35);
+                transition:
+                    transform 0.1s ease,
+                    box-shadow 0.1s ease,
+                    background-color 0.1s ease;
+            }
+
+            .btn-cart:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 10px 22px rgba(15, 118, 110, 0.4);
+                background-color: #115e59;
+            }
+
+            .btn-cart-count {
+                background: rgba(15, 23, 42, 0.15);
+                border-radius: 999px;
+                padding: 0.1rem 0.45rem;
+                font-size: 0.75rem;
+            }
+
+            /* نوار دسته‌بندی */
+            .nav-cats {
+                border-top: 1px solid #f3f4f6;
+                border-bottom: 1px solid #f3f4f6;
+                background-color: white;
+            }
+
+            .nav-cats-inner {
+                display: flex;
+                gap: 1rem;
+                padding: 0.55rem 0;
+                overflow-x: auto;
+                scrollbar-width: none;
+            }
+
+            .nav-cats-inner::-webkit-scrollbar {
+                display: none;
+            }
+
+            .cat-pill {
+                padding: 0.3rem 0.9rem;
+                border-radius: 999px;
+                background-color: #f3f4f6;
+                font-size: 0.85rem;
+                color: #4b5563;
+                white-space: nowrap;
+                cursor: pointer;
+                transition:
+                    background-color 0.15s ease,
+                    color 0.15s ease;
+            }
+
+            .cat-pill--active {
+                background-color: var(--color-primary-soft);
+                color: var(--color-primary);
+                font-weight: 600;
+            }
+
+            .cat-pill:hover {
+                background-color: #e5e7eb;
+            }
+
+            main {
+                flex: 1;
+                padding: 1.5rem 0 2.5rem;
+            }
+
+            /* بخش قهرمان / بنر */
+            .hero {
+                display: grid;
+                grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.6fr);
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+                align-items: center;
+            }
+
+            .hero-card {
+                background: white;
+                border-radius: 18px;
+                padding: 1.5rem;
+                box-shadow: var(--shadow-soft);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .hero-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                padding: 0.2rem 0.7rem;
+                border-radius: 999px;
+                background-color: var(--color-primary-soft);
+                color: var(--color-primary);
+                font-size: 0.75rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .hero-title {
+                font-size: 1.4rem;
+                font-weight: 800;
+                margin-bottom: 0.4rem;
+            }
+
+            .hero-subtitle {
+                font-size: 0.9rem;
+                color: var(--color-muted);
+                margin-bottom: 1rem;
+            }
+
+            .hero-highlight {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.75rem;
+                margin-bottom: 1.2rem;
+                font-size: 0.85rem;
+            }
+
+            .hero-highlight-item {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                padding: 0.25rem 0.7rem;
+                border-radius: 999px;
+                background-color: #f9fafb;
+                border: 1px dashed #e5e7eb;
+                color: #374151;
+            }
+
+            .hero-cta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.75rem;
+                align-items: center;
+            }
+
+            .btn-primary {
+                padding: 0.55rem 1.2rem;
+                border-radius: 999px;
+                border: none;
+                background: var(--color-primary);
+                color: white;
+                font-size: 0.9rem;
+                cursor: pointer;
+                box-shadow: 0 10px 22px rgba(15, 118, 110, 0.4);
+                transition:
+                    transform 0.1s ease,
+                    box-shadow 0.1s ease,
+                    background-color 0.1s ease;
+            }
+
+            .btn-primary:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 12px 26px rgba(15, 118, 110, 0.45);
+                background-color: #115e59;
+            }
+
+            .btn-ghost {
+                padding: 0.55rem 1rem;
+                border-radius: 999px;
+                border: 1px solid #e5e7eb;
+                background: white;
+                color: #374151;
+                font-size: 0.85rem;
+                cursor: pointer;
+                transition:
+                    background-color 0.1s ease,
+                    border-color 0.1s ease;
+            }
+
+            .btn-ghost:hover {
+                background-color: #f9fafb;
+                border-color: #d1d5db;
+            }
+
+            .hero-note {
+                font-size: 0.8rem;
+                color: var(--color-muted);
+            }
+
+            .hero-visual {
+                background: radial-gradient(circle at 0% 0%, #ccfbf1, #0f766e);
+                border-radius: 18px;
+                padding: 1.2rem;
+                color: white;
+                position: relative;
+                overflow: hidden;
+                min-height: 210px;
+                box-shadow: var(--shadow-soft);
+            }
+
+            .hero-visual-tag {
+                font-size: 0.8rem;
+                opacity: 0.9;
+                margin-bottom: 0.5rem;
+            }
+
+            .hero-visual-main {
+                font-size: 1.1rem;
+                font-weight: 700;
+                margin-bottom: 0.4rem;
+            }
+
+            .hero-visual-sub {
+                font-size: 0.85rem;
+                opacity: 0.9;
+                margin-bottom: 1rem;
+            }
+
+            .hero-visual-badges {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                font-size: 0.8rem;
+            }
+
+            .hero-visual-badge {
+                padding: 0.25rem 0.7rem;
+                border-radius: 999px;
+                background: rgba(15, 23, 42, 0.25);
+                backdrop-filter: blur(6px);
+            }
+
+            .hero-visual-circle {
+                position: absolute;
+                width: 180px;
+                height: 180px;
+                border-radius: 999px;
+                background: radial-gradient(circle at 30% 30%, #a7f3d0, #0f766e);
+                opacity: 0.25;
+                left: -40px;
+                bottom: -60px;
+            }
+
+            .hero-visual-tagline {
+                position: absolute;
+                bottom: 0.9rem;
+                left: 1.2rem;
+                font-size: 0.75rem;
+                opacity: 0.9;
+            }
+
+            /* لیست محصولات */
+            .section-header {
+                display: flex;
+                align-items: baseline;
+                justify-content: space-between;
+                margin-bottom: 0.9rem;
+                gap: 0.75rem;
+            }
+
+            .section-title {
+                font-size: 1rem;
+                font-weight: 700;
+            }
+
+            .section-subtitle {
+                font-size: 0.8rem;
+                color: var(--color-muted);
+            }
+
+            .section-link {
+                font-size: 0.8rem;
+                color: var(--color-primary);
+                cursor: pointer;
+                white-space: nowrap;
+            }
+
+            .products-grid {
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 1rem;
+            }
+
+            .product-card {
+                background: white;
+                border-radius: var(--radius-lg);
+                padding: 0.75rem;
+                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                transition:
+                    transform 0.1s ease,
+                    box-shadow 0.1s ease;
+                cursor: pointer;
+            }
+
+            .product-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+            }
+
+            .product-image {
+                border-radius: var(--radius-md);
+                background: linear-gradient(135deg, #f9fafb, #e5e7eb);
+                height: 140px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.8rem;
+                color: #9ca3af;
+            }
+
+            .product-title {
+                font-size: 0.9rem;
+                font-weight: 600;
+                min-height: 2.4em;
+            }
+
+            .product-meta {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 0.8rem;
+                color: var(--color-muted);
+            }
+
+            .product-price {
+                font-weight: 700;
+                color: var(--color-primary);
+                font-size: 0.9rem;
+            }
+
+            .product-tag {
+                padding: 0.1rem 0.5rem;
+                border-radius: 999px;
+                background-color: #f3f4f6;
+                font-size: 0.75rem;
+            }
+
+            .product-actions {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 0.25rem;
+                gap: 0.5rem;
+            }
+
+            .btn-add {
+                flex: 1;
+                padding: 0.35rem 0.7rem;
+                border-radius: 999px;
+                border: none;
+                background-color: #0f766e;
+                color: white;
+                font-size: 0.8rem;
+                cursor: pointer;
+                transition: background-color 0.1s ease;
+            }
+
+            .btn-add:hover {
+                background-color: #115e59;
+            }
+
+            .product-badge-small {
+                font-size: 0.7rem;
+                color: #16a34a;
+                background-color: #dcfce7;
+                padding: 0.15rem 0.5rem;
+                border-radius: 999px;
+                white-space: nowrap;
+            }
+
+            /* فوتر */
+            footer {
+                border-top: 1px solid #e5e7eb;
+                background-color: white;
+                padding: 1rem 0 1.5rem;
+                font-size: 0.8rem;
+                color: var(--color-muted);
+            }
+
+            .footer-inner {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 0.75rem;
+                flex-wrap: wrap;
+            }
+
+            .footer-links {
+                display: flex;
+                gap: 0.75rem;
+                flex-wrap: wrap;
+            }
+
+            .footer-link {
+                cursor: pointer;
+            }
+
+            /* ریسپانسیو */
+            @media (max-width: 900px) {
+                .hero {
+                    grid-template-columns: minmax(0, 1fr);
+                }
+
+                .hero-visual {
+                    order: -1;
+                }
+
+                .products-grid {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+            }
+
+            @media (max-width: 640px) {
+                .header-inner {
+                    flex-wrap: wrap;
+                }
+
+                .search-box {
+                    order: 3;
+                    width: 100%;
+                }
+
+                .products-grid {
+                    grid-template-columns: minmax(0, 1fr);
+                }
+
+                main {
+                    padding-top: 1rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page">
+            <header>
+                <div class="container">
+                    <div class="header-inner">
+                        <div class="brand">
+                            <div class="brand-logo">₮</div>
+                            <div>
+                                <div class="brand-text-main">دالر تری فارسی</div>
+                                <div class="brand-text-sub">
+                                    هر خرید، یک صرفه‌جویی هوشمند
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="search-box">
+                            <input
+                                type="search"
+                                class="search-input"
+                                placeholder="جستجوی محصول، دسته‌بندی یا برند..."
+                            />
+                            <span class="search-icon">🔍</span>
+                        </div>
+
+                        <div class="header-actions">
+                            <span class="header-link">ورود / ثبت‌نام</span>
+                            <button class="btn-cart">
+                                <span>سبد خرید</span>
+                                <span class="btn-cart-count">۰</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="nav-cats">
+                    <div class="container">
+                        <div class="nav-cats-inner">
+                            <div class="cat-pill cat-pill--active">
+                                پیشنهاد ویژه امروز
+                            </div>
+                            <div class="cat-pill">خانه و آشپزخانه</div>
+                            <div class="cat-pill">تنقلات و خوراکی</div>
+                            <div class="cat-pill">لوازم تحریر</div>
+                            <div class="cat-pill">آرایشی و بهداشتی</div>
+                            <div class="cat-pill">نظم‌دهنده و سازمان‌دهی</div>
+                            <div class="cat-pill">فصلی و مناسبتی</div>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+
+            <main>
+                <div class="container">
+                    <!-- Hero -->
+                    <section class="hero">
+                        <div class="hero-card">
+                            <div class="hero-badge">
+                                <span>🔥</span>
+                                <span>حراج روزانه دالر تری فارسی</span>
+                            </div>
+                            <h1 class="hero-title">
+                                هر چیزی که لازم داری، با قیمت‌های ریز و دوست‌داشتنی
+                            </h1>
+                            <p class="hero-subtitle">
+                                از لوازم خانه تا خوراکی و نظم‌دهنده‌ها؛ همه‌چیز را یک‌جا
+                                و با قیمت اقتصادی پیدا کن.
+                            </p>
+
+                            <div class="hero-highlight">
+                                <div class="hero-highlight-item">
+                                    <span>🚚</span>
+                                    <span>ارسال سریع در سراسر ایران</span>
+                                </div>
+                                <div class="hero-highlight-item">
+                                    <span>✅</span>
+                                    <span>ضمانت کیفیت و اصالت کالا</span>
+                                </div>
+                                <div class="hero-highlight-item">
+                                    <span>💳</span>
+                                    <span>پرداخت امن اینترنتی</span>
+                                </div>
+                            </div>
+
+                            <div class="hero-cta">
+                                <button class="btn-primary">
+                                    مشاهده پیشنهادهای امروز
+                                </button>
+                                <button class="btn-ghost">
+                                    مشاهده همه دسته‌بندی‌ها
+                                </button>
+                                <span class="hero-note"
+                                    >امروز بیش از ۵۰ محصول با تخفیف ویژه فعال است.</span
+                                >
+                            </div>
+                        </div>
+
+                        <aside class="hero-visual">
+                            <div class="hero-visual-tag">پیشنهاد لحظه‌ای</div>
+                            <div class="hero-visual-main">پک نظم‌دهنده کشو و کمد</div>
+                            <div class="hero-visual-sub">
+                                مناسب آشپزخانه، اتاق خواب و میز کار؛ هر پک فقط با یک
+                                قیمت اقتصادی.
+                            </div>
+                            <div class="hero-visual-badges">
+                                <div class="hero-visual-badge">تا ۳۰٪ تخفیف</div>
+                                <div class="hero-visual-badge">پرفروش این هفته</div>
+                                <div class="hero-visual-badge">موجودی محدود</div>
+                            </div>
+                            <div class="hero-visual-circle"></div>
+                            <div class="hero-visual-tagline">
+                                همه‌چیز مرتب، با کمترین هزینه.
+                            </div>
+                        </aside>
+                    </section>
+
+                    <!-- محصولات -->
+                    <section>
+                        <div class="section-header">
+                            <div>
+                                <h2 class="section-title">محصولات منتخب امروز</h2>
+                                <p class="section-subtitle">
+                                    چند نمونه محصول برای تست ظاهر؛ در پروژه واقعی این
+                                    بخش را از سرور پر کن.
+                                </p>
+                            </div>
+                            <div class="section-link">مشاهده همه محصولات</div>
+                        </div>
+
+                        <div class="products-grid">
+                            <!-- کارت محصول نمونه ۱ -->
+                            <article class="product-card">
+                                <div class="product-image">تصویر محصول</div>
+                                <h3 class="product-title">
+                                    لیوان شیشه‌ای ساده، مناسب نوشیدنی‌های روزانه
+                                </h3>
+                                <div class="product-meta">
+                                    <span class="product-price">۴۹,۰۰۰ تومان</span>
+                                    <span class="product-tag">خانه و آشپزخانه</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn-add">افزودن به سبد</button>
+                                    <span class="product-badge-small">ارسال سریع</span>
+                                </div>
+                            </article>
+
+                            <!-- کارت محصول نمونه ۲ -->
+                            <article class="product-card">
+                                <div class="product-image">تصویر محصول</div>
+                                <h3 class="product-title">
+                                    ست خودکار رنگی برای یادداشت و برنامه‌ریزی
+                                </h3>
+                                <div class="product-meta">
+                                    <span class="product-price">۳۹,۰۰۰ تومان</span>
+                                    <span class="product-tag">لوازم تحریر</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn-add">افزودن به سبد</button>
+                                    <span class="product-badge-small">پرفروش</span>
+                                </div>
+                            </article>
+
+                            <!-- کارت محصول نمونه ۳ -->
+                            <article class="product-card">
+                                <div class="product-image">تصویر محصول</div>
+                                <h3 class="product-title">
+                                    ظرف نظم‌دهنده یخچال، شفاف و کم‌جا
+                                </h3>
+                                <div class="product-meta">
+                                    <span class="product-price">۵۹,۰۰۰ تومان</span>
+                                    <span class="product-tag">نظم‌دهنده</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn-add">افزودن به سبد</button>
+                                    <span class="product-badge-small"
+                                        >موجودی محدود</span
+                                    >
+                                </div>
+                            </article>
+
+                            <!-- کارت محصول نمونه ۴ -->
+                            <article class="product-card">
+                                <div class="product-image">تصویر محصول</div>
+                                <h3 class="product-title">
+                                    اسنک و چیپس میکس، مناسب دورهمی‌های دوستانه
+                                </h3>
+                                <div class="product-meta">
+                                    <span class="product-price">۲۹,۰۰۰ تومان</span>
+                                    <span class="product-tag">تنقلات</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn-add">افزودن به سبد</button>
+                                    <span class="product-badge-small">تازه‌رسیده</span>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+                </div>
+            </main>
+
+            <footer>
+                <div class="container">
+                    <div class="footer-inner">
+                        <div>© دالر تری فارسی - همه حقوق محفوظ است.</div>
+                        <div class="footer-links">
+                            <span class="footer-link">سوالات متداول</span>
+                            <span class="footer-link">شرایط و قوانین</span>
+                            <span class="footer-link">حریم خصوصی</span>
+                            <span class="footer-link">تماس با ما</span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

@@ -7,5 +7,5 @@ pub async fn render_home(ViewEngine(v): ViewEngine<TeraView>) -> Result<impl Int
 }
 
 pub fn routes() -> Routes {
-    Routes::new().prefix("home").add("/", get(render_home))
+    Routes::new().prefix("").add("/", get(render_home))
 }
